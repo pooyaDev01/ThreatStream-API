@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="ThreatStream.Contracts/ThreatStream.Contracts.csproj" />
+  <Project Path="ThreatStream.Detection.Worker/ThreatStream.Detection.Worker.csproj" />
+  <Project Path="ThreatStream.Enrichment.Worker/ThreatStream.Enrichment.Worker.csproj" />
+  <Project Path="ThreatStream.Infrastructure/ThreatStream.Infrastructure.csproj" />
+  <Project Path="ThreatStream.Ingestion.Api/ThreatStream.Ingestion.Api.csproj" />
+  <Project Path="ThreatStream.Management.Api/ThreatStream.Management.Api.csproj" />
+</Solution>
