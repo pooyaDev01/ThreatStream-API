@@ -17,18 +17,13 @@ namespace ThreatStream.Ingestion.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReceiveEvent(
-            [FromBody] SecurityEventRequest request)
+        public async Task<IActionResult> ReceiveEvent([FromBody] SecurityEventRequest request)
         {
-            try
-            {
-                var message = await _ingestionService.IngestAsync(request);
+            var message = await _ingestionService.IngestAsync(request);
 
-                return Accepted(message);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Unauthorized("Tenant ID could not be determined.");
-            }
+            return Accepted(message);
+
         }
+    }
 }
+
