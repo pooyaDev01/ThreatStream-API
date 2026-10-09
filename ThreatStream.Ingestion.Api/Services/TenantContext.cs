@@ -1,6 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-
-namespace ThreatStream.Ingestion.Api.Services
+﻿namespace ThreatStream.Ingestion.Api.Services
 {
     public class TenantContext : ITenantContext
     {
@@ -13,30 +11,12 @@ namespace ThreatStream.Ingestion.Api.Services
 
         public string? GetTenantId()
         {
-            var authorizationHeader = _httpContextAccessor
-                .HttpContext?
-                .Request
-                .Headers
-                .Authorization
-                .FirstOrDefault();
+            var user = _httpContextAccessor.HttpContext?.User;
 
-            if (string.IsNullOrWhiteSpace(authorizationHeader))
+            if (user?.Identity?.IsAuthenticated != true)
                 return null;
 
-            if (!authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                return null;
-
-            var token = authorizationHeader["Bearer ".Length..].Trim();
-
-            if (string.IsNullOrWhiteSpace(token))
-                return null;
-
-            var handler = new JwtSecurityTokenHandler();
-            var jwt = handler.ReadJwtToken(token);
-
-            return jwt.Claims
-                .FirstOrDefault(claim => claim.Type == "tenantId")
-                ?.Value;
+            return user.FindFirst("tenantId")?.Value;
         }
     }
 }

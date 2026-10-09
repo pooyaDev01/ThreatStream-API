@@ -1,4 +1,5 @@
-﻿using ThreatStream.Contracts.Events;
+﻿using Microsoft.Extensions.Options;
+using ThreatStream.Contracts.Events;
 using ThreatStream.Contracts.Messaging;
 using ThreatStream.Ingestion.Api.Configuration;
 using ThreatStream.Ingestion.Api.Models;
@@ -10,11 +11,11 @@ namespace ThreatStream.Ingestion.Api.Services
         private readonly ITenantContext _tenantContext;
         private readonly IMessagePublisher _messagePublisher;
         private readonly MessagingOptions _messagingOptions;
-        public EventIngestionService(ITenantContext tenantContext, IMessagePublisher messagePublisher, MessagingOptions messagingOptions)
+        public EventIngestionService(ITenantContext tenantContext, IMessagePublisher messagePublisher, IOptions<MessagingOptions> messagingOptions)
         {
             _tenantContext = tenantContext;
             _messagePublisher = messagePublisher;
-            _messagingOptions = messagingOptions;
+            _messagingOptions = messagingOptions.Value;
         }
 
         public async Task<SecurityEventMessage> IngestAsync(SecurityEventRequest request)
@@ -40,8 +41,7 @@ namespace ThreatStream.Ingestion.Api.Services
 
             if (string.IsNullOrWhiteSpace(_messagingOptions.SecurityEventsTopic))
             {
-                throw new InvalidOperationException(
-                    "Security events Kafka topic is not configured.");
+                throw new InvalidOperationException("Security events Kafka topic is not configured.");
             }
 
             await _messagePublisher.PublishAsync(message, _messagingOptions.SecurityEventsTopic);
