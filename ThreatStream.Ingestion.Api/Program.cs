@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Negotiate;
 using ThreatStream.Contracts.Messaging;
 using ThreatStream.Infrastructure.Configuration;
 using ThreatStream.Infrastructure.Messaging;
-using ThreatStream.Ingestion.Api.Configuration;
 using ThreatStream.Ingestion.Api.Middleware;
 using ThreatStream.Ingestion.Api.Services;
 using ThreatStream.Ingestion.Api.Validators;

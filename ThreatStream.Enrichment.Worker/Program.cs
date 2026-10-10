@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 using ThreatStream.Contracts.Messaging;
 using ThreatStream.Enrichment.Worker;
 using ThreatStream.Enrichment.Worker.Configuration;
@@ -11,6 +13,15 @@ builder.Services.Configure<KafkaOptions>(
 
 builder.Services.Configure<RedisOptions>(
     builder.Configuration.GetSection("Redis"));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
+{
+    var options = serviceProvider
+        .GetRequiredService<IOptions<RedisOptions>>()
+        .Value;
+
+    return ConnectionMultiplexer.Connect(options.ConnectionString);
+});
 
 builder.Services.AddSingleton<IMessageConsumer, KafkaMessageConsumer>();
 

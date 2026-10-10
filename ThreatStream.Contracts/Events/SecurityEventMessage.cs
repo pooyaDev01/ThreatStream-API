@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ThreatStream.Contracts.Events
+﻿namespace ThreatStream.Contracts.Events
 {
     public record SecurityEventMessage
     (

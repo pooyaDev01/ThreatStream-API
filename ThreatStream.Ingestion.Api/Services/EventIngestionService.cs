@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using ThreatStream.Contracts.Events;
 using ThreatStream.Contracts.Messaging;
-using ThreatStream.Ingestion.Api.Configuration;
+using ThreatStream.Infrastructure.Configuration;
 using ThreatStream.Ingestion.Api.Models;
 
 namespace ThreatStream.Ingestion.Api.Services

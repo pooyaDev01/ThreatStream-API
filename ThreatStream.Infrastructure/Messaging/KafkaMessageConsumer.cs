@@ -1,8 +1,5 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
 using ThreatStream.Contracts.Messaging;
 using ThreatStream.Infrastructure.Configuration;
