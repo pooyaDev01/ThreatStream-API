@@ -11,6 +11,9 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<KafkaOptions>(
     builder.Configuration.GetSection("Kafka"));
 
+builder.Services.AddSingleton(sp =>
+    sp.GetRequiredService<IOptions<MessagingOptions>>().Value);
+
 builder.Services.Configure<RedisOptions>(
     builder.Configuration.GetSection("Redis"));
 

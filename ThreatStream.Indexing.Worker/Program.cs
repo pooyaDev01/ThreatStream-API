@@ -7,10 +7,12 @@ using ThreatStream.Infrastructure.Configuration;
 using ThreatStream.Infrastructure.Messaging;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
 
 builder.Services.Configure<KafkaOptions>(
     builder.Configuration.GetSection("Kafka"));
+
+builder.Services.AddSingleton(sp =>
+    sp.GetRequiredService<IOptions<MessagingOptions>>().Value);
 
 builder.Services.Configure<ElasticsearchOptions>(
     builder.Configuration.GetSection("Elasticsearch"));
@@ -28,6 +30,8 @@ builder.Services.AddSingleton(sp =>
 });
 
 builder.Services.AddSingleton<IMessageConsumer, KafkaMessageConsumer>();
+
+builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
 host.Run();

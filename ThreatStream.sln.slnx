@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="ThreatStream.Contracts/ThreatStream.Contracts.csproj" />
+  <Project Path="ThreatStream.Detection.Engine/ThreatStream.Detection.Engine.csproj" Id="c3cad488-0172-412b-8b55-af5de383205c" />
   <Project Path="ThreatStream.Detection.Worker/ThreatStream.Detection.Worker.csproj" />
   <Project Path="ThreatStream.DetectionManagement.Api/ThreatStream.DetectionManagement.Api.csproj" Id="916751d5-be69-477a-bed0-9e4bafcbba58" />
   <Project Path="ThreatStream.Enrichment.Worker/ThreatStream.Enrichment.Worker.csproj" />

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ThreatStream.Indexing.Worker.Configuration;
+﻿namespace ThreatStream.Indexing.Worker.Configuration;
 
 public class ElasticsearchOptions
 {
