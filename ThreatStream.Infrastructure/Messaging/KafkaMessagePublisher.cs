@@ -8,7 +8,7 @@ namespace ThreatStream.Infrastructure.Messaging
 {
     public class KafkaMessagePublisher : IMessagePublisher, IDisposable
     {
-        private readonly IProducer<Null, string> _producer;
+        private readonly IProducer<string, string> _producer;
 
         public KafkaMessagePublisher(IOptions<KafkaOptions> options)
         {
@@ -17,17 +17,18 @@ namespace ThreatStream.Infrastructure.Messaging
                 BootstrapServers = options.Value.BootstrapServers
             };
 
-            _producer = new ProducerBuilder<Null, string>(config).Build();
+            _producer = new ProducerBuilder<string, string>(config).Build();
         }
 
-        public async Task PublishAsync<T>(T message, string topic)
+        public async Task PublishAsync<T>(T message, string topic, string? key = null)
         {
             var json = JsonSerializer.Serialize(message);
 
             await _producer.ProduceAsync(
                 topic,
-                new Message<Null, string>
+                new Message<string, string>
                 {
+                    Key = key!,
                     Value = json
                 });
         }

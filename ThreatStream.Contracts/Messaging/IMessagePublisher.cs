@@ -6,6 +6,6 @@ namespace ThreatStream.Contracts.Messaging
 {
     public interface IMessagePublisher
     {
-        Task PublishAsync<T>(T message, string topic);
+        Task PublishAsync<T>(T message, string topic, string? key = null);
     }
 }

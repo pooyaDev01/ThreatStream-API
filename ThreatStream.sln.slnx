@@ -3,6 +3,7 @@
   <Project Path="ThreatStream.Detection.Worker/ThreatStream.Detection.Worker.csproj" />
   <Project Path="ThreatStream.DetectionManagement.Api/ThreatStream.DetectionManagement.Api.csproj" Id="916751d5-be69-477a-bed0-9e4bafcbba58" />
   <Project Path="ThreatStream.Enrichment.Worker/ThreatStream.Enrichment.Worker.csproj" />
+  <Project Path="ThreatStream.Indexing.Worker/ThreatStream.Indexing.Worker.csproj" Id="a793e6ab-8aaf-4aac-ace9-771c6faa59de" />
   <Project Path="ThreatStream.Infrastructure/ThreatStream.Infrastructure.csproj" />
   <Project Path="ThreatStream.Ingestion.Api/ThreatStream.Ingestion.Api.csproj" />
 </Solution>

@@ -15,7 +15,7 @@ namespace ThreatStream.Infrastructure.Messaging
             _options = options.Value;
         }
 
-        public async Task ConsumeAsync<T>(string topic, string consumerGroupId, Func<T, Task> messageHandler, CancellationToken cancellationToken)
+        public async Task ConsumeAsync<T>(string topic, string consumerGroupId, Func<string?, T, Task> messageHandler, CancellationToken cancellationToken)
         {
             var config = new ConsumerConfig
             {
@@ -25,7 +25,7 @@ namespace ThreatStream.Infrastructure.Messaging
                 EnableAutoCommit = false
             };
 
-            using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
+            using var consumer = new ConsumerBuilder<string, string>(config).Build();
 
             consumer.Subscribe(topic);
 
@@ -44,7 +44,7 @@ namespace ThreatStream.Infrastructure.Messaging
                             throw new JsonException($"Kafka message from topic '{topic}' deserialized to null.");
                         }
 
-                        await messageHandler(message);
+                        await messageHandler(result.Message.Key, message);
 
                         consumer.Commit(result);
                     }

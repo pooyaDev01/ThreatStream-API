@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-ThreatStream.Indexing.Worker-9f954643-a38d-4ab3-bd9f-f3f2042cd2f5</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="9.5.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThreatStream.Contracts\ThreatStream.Contracts.csproj" />
+    <ProjectReference Include="..\ThreatStream.Infrastructure\ThreatStream.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

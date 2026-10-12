@@ -44,7 +44,9 @@ namespace ThreatStream.Ingestion.Api.Services
                 throw new InvalidOperationException("Security events Kafka topic is not configured.");
             }
 
-            await _messagePublisher.PublishAsync(message, _messagingOptions.SecurityEventsTopic);
+            var eventId = Guid.NewGuid().ToString("N");
+
+            await _messagePublisher.PublishAsync( message, _messagingOptions.SecurityEventsTopic, eventId);
 
             return message;
         }

@@ -42,13 +42,10 @@ public class Worker : BackgroundService
         if (string.IsNullOrWhiteSpace(consumerGroupId))
             throw new InvalidOperationException("Kafka:ConsumerGroupId is not configured.");
 
-        if (string.IsNullOrWhiteSpace(consumerGroupId))
-            throw new InvalidOperationException("Kafka:ConsumerGroupId is not configured.");
-
         _logger.LogInformation("Enrichment Worker started.");
 
         await _messageConsumer.ConsumeAsync<SecurityEventMessage>(_messagingOptions.SecurityEventsTopic, consumerGroupId,
-        async message =>
+        async (messageKey, message) =>
         {
             var threatIntel = await _threatIntelService.GetByHashAsync(message.FileHash, stoppingToken);
 
@@ -65,7 +62,7 @@ public class Worker : BackgroundService
                 threatIntel?.ThreatName,
                 threatIntel?.Severity);
 
-            await _messagePublisher.PublishAsync(enrichedMessage, _messagingOptions.EnrichedMessagesTopic);
+            await _messagePublisher.PublishAsync(enrichedMessage, _messagingOptions.EnrichedMessagesTopic, messageKey);
 
             _logger.LogInformation("Enriched event published for agent {AgentId}.", message.AgentId);
 
