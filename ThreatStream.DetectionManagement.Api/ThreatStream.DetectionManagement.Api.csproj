@@ -8,6 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThreatStream.Contracts\ThreatStream.Contracts.csproj" />
+    <ProjectReference Include="..\ThreatStream.Detection.Engine\ThreatStream.Detection.Engine.csproj" />
   </ItemGroup>
 
 </Project>

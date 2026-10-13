@@ -1,8 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using ThreatStream.Contracts.Events;
 using ThreatStream.Contracts.Messaging;
-using ThreatStream.Detection.Engine;
 using ThreatStream.Detection.Engine.Abstractions;
 using ThreatStream.Detection.Engine.Configuration;
 using ThreatStream.Detection.Engine.Models;
@@ -57,8 +55,6 @@ public sealed class Worker : BackgroundService
             throw new InvalidOperationException($"Event '{messageKey}' has an invalid tenant ID.");
 
         using var scope = _scopeFactory.CreateScope();
-
-        var dbContext = scope.ServiceProvider.GetRequiredService<DetectionDbContext>();
 
         var ruleService = scope.ServiceProvider.GetRequiredService<DetectionRuleService>();
 
