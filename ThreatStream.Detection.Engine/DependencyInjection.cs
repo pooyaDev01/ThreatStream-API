@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThreatStream.Detection.Engine.Abstractions;
@@ -9,26 +9,35 @@ namespace ThreatStream.Detection.Engine;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDetectionEngine(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static IServiceCollection AddDetectionEngine(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<DetectionEngineOptions>(
-            configuration.GetSection("DetectionEngine"));
+        services.Configure<DetectionEngineOptions>(configuration.GetSection("DetectionEngine"));
 
-        services.AddHttpClient<IDetectionQueryExecutor,
-            ElasticsearchDetectionQueryExecutor>((serviceProvider, client) =>
+        services.AddDbContext<DetectionDbContext>(options =>
+        {
+            var connectionString = configuration["DetectionEngine:ConnectionString"];
+
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                var options = configuration
-                    .GetSection("DetectionEngine")
-                    .Get<DetectionEngineOptions>()
-                    ?? new DetectionEngineOptions();
+                throw new InvalidOperationException("DetectionEngine:ConnectionString is not configured.");
+            }
 
-                client.BaseAddress = new Uri(
-                    options.ElasticsearchUrl.TrimEnd('/') + "/");
+            options.UseSqlServer(connectionString);
+        });
 
-                client.Timeout = TimeSpan.FromSeconds(30);
-            });
+        services.AddScoped<DetectionRuleService>();
+
+        services.AddHttpClient<IDetectionQueryExecutor, ElasticsearchDetectionQueryExecutor>((_, client) =>
+        {
+            var options = configuration
+                .GetSection("DetectionEngine")
+                .Get<DetectionEngineOptions>()
+                ?? new DetectionEngineOptions();
+
+            client.BaseAddress = new Uri(options.ElasticsearchUrl.TrimEnd('/') + "/");
+
+            client.Timeout = TimeSpan.FromSeconds(30);
+        });
 
         return services;
     }

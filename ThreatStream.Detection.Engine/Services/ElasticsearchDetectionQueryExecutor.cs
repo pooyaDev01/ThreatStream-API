@@ -1,6 +1,4 @@
-﻿na
-using System.Net.Http.Json;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using ThreatStream.Detection.Engine.Abstractions;
 using ThreatStream.Detection.Engine.Configuration;
@@ -37,8 +35,6 @@ public sealed class ElasticsearchDetectionQueryExecutor: IDetectionQueryExecutor
             throw new InvalidOperationException($"Rule '{rule.Id}' must contain a top-level 'query' property.");
         }
 
-        // The tenant condition is mandatory and is combined with,
-        // rather than substituted for, the rule's own query.
         var requestBody = new
         {
             size = 1000,
@@ -86,8 +82,7 @@ public sealed class ElasticsearchDetectionQueryExecutor: IDetectionQueryExecutor
 
         foreach (var hit in hitItems.EnumerateArray())
         {
-            if (hit.TryGetProperty("_id", out var id) &&
-                id.ValueKind == JsonValueKind.String)
+            if (hit.TryGetProperty("_id", out var id) && id.ValueKind == JsonValueKind.String)
             {
                 ids.Add(id.GetString()!);
             }
