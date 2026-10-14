@@ -1,48 +1,49 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThreatStream.Ingestion.Api.Models;
 using ThreatStream.Ingestion.Api.Services;
 
-namespace ThreatStream.Ingestion.Api.Controllers
+namespace ThreatStream.Ingestion.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class EventsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class EventsController : ControllerBase
+    private const string TenantHeader = "X-Tenant-Id";
+
+    private readonly IEventIngestionService _ingestionService;
+    private readonly IValidator<SecurityEventRequest> _validator;
+
+    public EventsController(IEventIngestionService ingestionService, IValidator<SecurityEventRequest> validator)
     {
-        private readonly IEventIngestionService _ingestionService;
+        _ingestionService = ingestionService;
+        _validator = validator;
+    }
 
-        private readonly IValidator<SecurityEventRequest> _validator;
-
-        public EventsController(IEventIngestionService ingestionService, IValidator<SecurityEventRequest> validator)
+    [HttpPost]
+    public async Task<IActionResult> ReceiveEvent([FromBody] SecurityEventRequest request, CancellationToken cancellationToken)
+    {
+        if (!Request.Headers.TryGetValue(TenantHeader, out var headerValue) || !Guid.TryParse(headerValue.ToString(), out var tenantId))
         {
-            _ingestionService = ingestionService;
-            _validator = validator;
+            return BadRequest(new{error = $"A valid {TenantHeader} header containing a tenant GUID is required."});
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ReceiveEvent([FromBody] SecurityEventRequest request)
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
         {
-
-            var validationResult = await _validator.ValidateAsync(request);
-
-            if (!validationResult.IsValid)
+            foreach (var error in validationResult.Errors)
             {
-                foreach (var error in validationResult.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-
-                return ValidationProblem(ModelState);
+                ModelState.AddModelError(
+                    error.PropertyName,
+                    error.ErrorMessage);
             }
 
-            var message = await _ingestionService.IngestAsync(request);
-
-            return Accepted(message);
-
+            return ValidationProblem(ModelState);
         }
+    
+        var message = await _ingestionService.IngestAsync(request, tenantId, cancellationToken);
+
+        return Accepted(message);
     }
 }
-

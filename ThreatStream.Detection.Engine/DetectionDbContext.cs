@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 using ThreatStream.Detection.Engine.Models;
 
 namespace ThreatStream.Detection.Engine;
@@ -10,11 +9,12 @@ public sealed class DetectionDbContext : DbContext
     {
     }
 
+    public DbSet<Tenant> Tenants => Set<Tenant>();
+
     public DbSet<DetectionRule> DetectionRules => Set<DetectionRule>();
 
     public DbSet<SecurityAlert> SecurityAlerts => Set<SecurityAlert>();
 
-    public DbSet<Tenant> Tenants => Set<Tenant>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

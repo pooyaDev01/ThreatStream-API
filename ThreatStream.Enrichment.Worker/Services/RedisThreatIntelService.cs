@@ -1,5 +1,4 @@
-﻿
-using System.Text.Json;
+﻿using System.Text.Json;
 using StackExchange.Redis;
 using ThreatStream.Enrichment.Worker.Models;
 

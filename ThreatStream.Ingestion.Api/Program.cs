@@ -1,5 +1,5 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.Extensions.Options;
 using ThreatStream.Contracts.Messaging;
 using ThreatStream.Infrastructure.Configuration;
 using ThreatStream.Infrastructure.Messaging;
@@ -13,23 +13,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = options.DefaultPolicy;
-});
-
 builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
 
 builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Kafka"));
 
 builder.Services.AddSingleton<IMessagePublisher, KafkaMessagePublisher>();
-
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddScoped<ITenantContext, TenantContext>();
 
 builder.Services.AddScoped<IEventIngestionService, EventIngestionService>();
 
@@ -46,14 +34,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

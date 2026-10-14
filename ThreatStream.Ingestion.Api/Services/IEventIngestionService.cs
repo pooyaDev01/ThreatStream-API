@@ -1,10 +1,9 @@
 ﻿using ThreatStream.Contracts.Events;
 using ThreatStream.Ingestion.Api.Models;
 
-namespace ThreatStream.Ingestion.Api.Services
+namespace ThreatStream.Ingestion.Api.Services;
+
+public interface IEventIngestionService
 {
-    public interface IEventIngestionService
-    {
-        Task<SecurityEventMessage> IngestAsync(SecurityEventRequest request);
-    }
+    Task<SecurityEventMessage> IngestAsync(SecurityEventRequest request, Guid tenantId, CancellationToken cancellationToken = default);
 }

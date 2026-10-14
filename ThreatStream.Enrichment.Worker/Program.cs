@@ -8,14 +8,11 @@ using ThreatStream.Infrastructure.Messaging;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.Services.Configure<KafkaOptions>(
-    builder.Configuration.GetSection("Kafka"));
+builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
 
-builder.Services.AddSingleton(sp =>
-    sp.GetRequiredService<IOptions<MessagingOptions>>().Value);
+builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Kafka"));
 
-builder.Services.Configure<RedisOptions>(
-    builder.Configuration.GetSection("Redis"));
+builder.Services.Configure<RedisOptions>(builder.Configuration.GetSection("Redis"));
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
 {
@@ -31,4 +28,5 @@ builder.Services.AddSingleton<IMessageConsumer, KafkaMessageConsumer>();
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
+
 host.Run();

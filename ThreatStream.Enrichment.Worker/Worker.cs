@@ -14,12 +14,7 @@ public class Worker : BackgroundService
     private readonly MessagingOptions _messagingOptions;
     private readonly IConfiguration _configuration;
 
-    public Worker(ILogger<Worker> logger,
-        IMessageConsumer messageConsumer,
-        IMessagePublisher messagePublisher,
-        RedisThreatIntelService threatIntelService,
-        MessagingOptions messagingOptions,
-        IConfiguration configuration)
+    public Worker(ILogger<Worker> logger, IMessageConsumer messageConsumer, IMessagePublisher messagePublisher, RedisThreatIntelService threatIntelService, MessagingOptions messagingOptions, IConfiguration configuration)
     {
         _logger = logger;
         _messageConsumer = messageConsumer;

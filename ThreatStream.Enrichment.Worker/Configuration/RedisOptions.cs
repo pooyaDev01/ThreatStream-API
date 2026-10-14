@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ThreatStream.Enrichment.Worker.Configuration;
+﻿namespace ThreatStream.Enrichment.Worker.Configuration;
 
 public class RedisOptions
 {
