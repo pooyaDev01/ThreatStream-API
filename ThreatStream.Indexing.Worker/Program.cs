@@ -8,14 +8,13 @@ using ThreatStream.Infrastructure.Messaging;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.Services.Configure<KafkaOptions>(
-    builder.Configuration.GetSection("Kafka"));
+builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
 
-builder.Services.AddSingleton(sp =>
-    sp.GetRequiredService<IOptions<MessagingOptions>>().Value);
+builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Kafka"));
 
-builder.Services.Configure<ElasticsearchOptions>(
-    builder.Configuration.GetSection("Elasticsearch"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<MessagingOptions>>().Value);
+
+builder.Services.Configure<ElasticsearchOptions>(builder.Configuration.GetSection("Elasticsearch"));
 
 builder.Services.AddSingleton(sp =>
 {

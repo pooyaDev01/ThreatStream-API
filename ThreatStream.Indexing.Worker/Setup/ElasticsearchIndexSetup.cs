@@ -1,4 +1,6 @@
 ﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.IndexManagement;
+using Elastic.Clients.Elasticsearch.Mapping;
 
 namespace ThreatStream.Indexing.Worker.Setup;
 
@@ -11,25 +13,28 @@ public static class ElasticsearchIndexSetup
         if (existsResponse.Exists)
             return;
 
-        var response = await client.Indices.CreateAsync(
-            indexName,
-            c => c
-                .Mappings(m => m
-                    .Properties(p => p
-                        .Date("timestamp")
-                        .Keyword("tenant_id")
-                        .Keyword("agent_id")
-                        .Keyword("event_type")
-                        .Keyword("process_name")
-                        .Keyword("file_hash")
-                        .Keyword("user")
-                        .Ip("ip_address")
-                        .Keyword("is_malicious")
-                        .Keyword("threat_name")
-                        .Keyword("severity")
-                    )
-                ),
-            cancellationToken);
+        var request = new CreateIndexRequest(indexName)
+        {
+            Mappings = new TypeMapping
+            {
+                Properties = new Properties
+                {
+                    { "timestamp", new DateProperty() },
+                    { "tenant_id", new KeywordProperty() },
+                    { "agent_id", new KeywordProperty() },
+                    { "event_type", new KeywordProperty() },
+                    { "process_name", new KeywordProperty() },
+                    { "file_hash", new KeywordProperty() },
+                    { "user", new KeywordProperty() },
+                    { "ip_address", new IpProperty() },
+                    { "is_malicious", new KeywordProperty() },
+                    { "threat_name", new KeywordProperty() },
+                    { "severity", new KeywordProperty() }
+                }
+            }
+        };
+
+        var response = await client.Indices.CreateAsync(request, cancellationToken);
 
         if (!response.IsValidResponse)
         {

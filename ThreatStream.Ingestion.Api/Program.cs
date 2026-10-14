@@ -23,6 +23,8 @@ builder.Services.AddScoped<IEventIngestionService, EventIngestionService>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddProblemDetails();
 
 builder.Services.AddValidatorsFromAssemblyContaining<SecurityEventRequestValidator>();
@@ -32,6 +34,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseExceptionHandler();

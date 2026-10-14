@@ -20,7 +20,7 @@ public class EventsController : ControllerBase
         _validator = validator;
     }
 
-    [HttpPost]
+    [HttpPost("receive")]
     public async Task<IActionResult> ReceiveEvent([FromBody] SecurityEventRequest request, CancellationToken cancellationToken)
     {
         if (!Request.Headers.TryGetValue(TenantHeader, out var headerValue) || !Guid.TryParse(headerValue.ToString(), out var tenantId))
