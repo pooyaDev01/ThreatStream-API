@@ -27,6 +27,8 @@ public static class DependencyInjection
 
         services.AddScoped<DetectionRuleService>();
 
+        services.AddScoped<IAlertManagementService, AlertManagementService>();
+
         services.AddHttpClient<IDetectionQueryExecutor, ElasticsearchDetectionQueryExecutor>((_, client) =>
         {
             var options = configuration
